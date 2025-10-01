@@ -124,8 +124,9 @@ function validarSenha(senha, chromeVersion) {
         return { valido: false, mensagem: 'Senha deve conter um feitiço do Harry Potter' };
     }
     
-    // Validar número de caracteres
-    const tamanhoSenha = [...senha].length.toString();
+    // Validar número de caracteres (contando emojis compostos como 1)
+    const segmenter = new Intl.Segmenter('pt-BR', { granularity: 'grapheme' });
+    const tamanhoSenha = [...segmenter.segment(senha)].length.toString();
     if (!senha.includes(tamanhoSenha)) {
         return { valido: false, mensagem: `Senha deve conter o número atual de caracteres: ${tamanhoSenha}` };
     }
@@ -137,12 +138,26 @@ function validarSenha(senha, chromeVersion) {
     
     // Validar nome do criador
     if (senha.includes('karan')) {
-        return { valido: false, mensagem: 'Respeita que nome próprio é com letra maiúscula' };
+        return { valido: false, mensagem: 'Nome próprio é com letra maiúscula' };
     }
 
     if (!senha.includes('Karan')) {
-        return { valido: false, mensagem: 'Senha deve conter o nome do criador do site' };
+        return { valido: false, mensagem: 'Nome do criador do site' };
     }
+
+    if (!senha.includes('verde')) {
+        return { valido: false, mensagem: `Entre ‘vermelho’, ‘azul’ e ‘verde’, a cor correta é aquela cujo nome aparece exatamente duas vezes nesta frase, enquanto os demais aparecem uma vez cada: vermelho, azul, verde, verde.` };
+    }
+   
+    if (!senha.includes('2ou3')) {
+        return { valido: false, mensagem: 'x2−5x+6=0' };
+    }
+
+    
+    if (!senha.includes('443')) {
+        return { valido: false, mensagem: 'Porta padrão do HTTPS?' };
+    }
+    
     
     return { valido: true };
 }
