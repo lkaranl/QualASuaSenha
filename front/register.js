@@ -20,12 +20,27 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
         
         if (response.ok) {
             messageDiv.className = 'message success';
-            messageDiv.textContent = data.message;
             
-            // Redirecionar para login após 2 segundos
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
+            let tempoRestante = 3;
+            messageDiv.innerHTML = `
+                ${data.message}<br>
+                <strong>Copie sua senha agora!</strong><br>
+                Redirecionando em ${tempoRestante} segundos...
+            `;
+            
+            const intervalo = setInterval(() => {
+                tempoRestante--;
+                if (tempoRestante > 0) {
+                    messageDiv.innerHTML = `
+                        ${data.message}<br>
+                        <strong>Copie sua senha agora!</strong><br>
+                        Redirecionando em ${tempoRestante} segundos...
+                    `;
+                } else {
+                    clearInterval(intervalo);
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
         } else {
             messageDiv.className = 'message error';
             messageDiv.textContent = data.message;

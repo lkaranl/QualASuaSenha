@@ -68,6 +68,7 @@ app.post('/register', (req, res) => {
     }
     
     // Validar senha
+    //const validacaoSenha = { valido: true };
     const validacaoSenha = validarSenha(senha, chromeVersion);
     if (!validacaoSenha.valido) {
         return res.status(400).json({ 
@@ -142,7 +143,7 @@ app.post('/login', (req, res) => {
         dataHora: new Date(timestamp).toLocaleString('pt-BR')
     });
     
-    const mensagemSecreta = `✅ AUTENTICADO - Hash: ${hashValidacao.substring(0, 16)}...${hashValidacao.substring(hashValidacao.length - 16)} | Timestamp: ${timestamp}`;
+    const mensagemSecreta = `✅ AUTENTICADO - Hash: ${hashValidacao} | Timestamp: ${timestamp}`;
     
     res.status(200).json({ 
         message: `Bem-vindo, ${usuario.nome}!`,
