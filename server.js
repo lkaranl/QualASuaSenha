@@ -46,7 +46,7 @@ function validarSenha(senha, chromeVersion) {
     }
     
     if (senha.length < 5) {
-        return { valido: false, mensagem: chromeVersion};
+        return { valido: false, mensagem: `Senha deve ter pelo menos 5 caracteres`};
     }
     
     if (!/\d/.test(senha)) {
@@ -84,7 +84,7 @@ function validarSenha(senha, chromeVersion) {
     const temEmojiParaCima = emojisParaCima.some(emoji => senha.includes(emoji));
     
     if (!temEmojiParaCima) {
-        return { valido: false, mensagem: 'Senha deve conter um emoji apontando para cima (☝ 👆 ⬆ ↑)' };
+        return { valido: false, mensagem: 'Senha deve conter um emoji apontando para cima' };
     }
     
     // Validar ano do hexa (Brasil ainda não ganhou, então aceita 2002 - penta)
@@ -110,8 +110,9 @@ function validarSenha(senha, chromeVersion) {
         return { valido: false, mensagem: 'Senha deve conter o código de telefone do Brasil' };
     }
     
-    // Validar bandeira dos Países Baixos na quinta posição
-    if (senha.charAt(4) !== '🇳' || senha.charAt(5) !== '🇱') {
+    // Validar bandeira dos Países Baixos na quinta posição (índice 4)
+    const senhaArray = [...senha];
+    if (senhaArray[4] !== '🇳' || senhaArray[5] !== '🇱') {
         return { valido: false, mensagem: 'A bandeira dos Países Baixos deve estar na quinta posição' };
     }
     
@@ -126,7 +127,7 @@ function validarSenha(senha, chromeVersion) {
     // Validar número de caracteres
     const tamanhoSenha = senha.length.toString();
     if (!senha.includes(tamanhoSenha)) {
-        return { valido: false, mensagem: `Senha deve conter o número atual de caracteres` };
+        return { valido: false, mensagem: `Senha deve conter o número atual de caracteres: ${tamanhoSenha}` };
     }
     
     // Validar versão do Chrome
