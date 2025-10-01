@@ -6,7 +6,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1e7e34 0%, #0d5c22 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -24,6 +24,27 @@ body {
     border-radius: 12px;
     padding: 40px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border-top: 4px solid #1e7e34;
+}
+
+.header-ifro {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.header-ifro h2 {
+    color: #1e7e34;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.header-ifro p {
+    color: #666;
+    font-size: 13px;
+    margin-top: 5px;
 }
 
 h1 {
@@ -55,13 +76,13 @@ input {
 
 input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #1e7e34;
 }
 
 .btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1e7e34 0%, #0d5c22 100%);
     color: white;
     border: none;
     border-radius: 6px;
@@ -74,7 +95,7 @@ input:focus {
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 20px rgba(30, 126, 52, 0.4);
 }
 
 .btn:active {
@@ -111,11 +132,12 @@ input:focus {
 }
 
 .switch-form a {
-    color: #667eea;
+    color: #1e7e34;
     text-decoration: none;
     font-weight: 600;
 }
 
 .switch-form a:hover {
     text-decoration: underline;
+    color: #0d5c22;
 }
