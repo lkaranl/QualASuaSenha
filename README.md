@@ -9,17 +9,17 @@ Sistema de login e registro com validação de campos.
 
 ## Funcionalidades
 
-- Página de registro com validação de:
-  - Nome (mínimo 3 caracteres)
-  - Email (formato válido)
-  - Senha (mínimo 6 caracteres)
-- Página de login
+- Página de registro com validação de múltiplas regras
+- Página de login com autenticação JWT
+- Dashboard protegido por autenticação
 - Validação no backend
+- Sistema de tokens para sessão
 
 ## Como usar
 
-1. Instalar dependências:
+1. Instalar dependências do backend:
 ```bash
+cd back
 npm install
 ```
 
@@ -28,13 +28,21 @@ npm install
 npm start
 ```
 
-3. Abrir o arquivo `index.html` no navegador
+3. Abrir o arquivo `front/index.html` no navegador
 
 ## Estrutura
 
-- `index.html` - Página de login
-- `register.html` - Página de cadastro
-- `style.css` - Estilos
-- `login.js` - Lógica do login
-- `register.js` - Lógica do cadastro
-- `server.js` - Servidor Node.js
+```
+/front
+  - index.html - Página de login
+  - register.html - Página de cadastro
+  - dashboard.html - Página protegida (após login)
+  - style.css - Estilos
+  - login.js - Lógica do login
+  - register.js - Lógica do cadastro
+  - dashboard.js - Lógica do dashboard
+
+/back
+  - server.js - Servidor Node.js com JWT
+  - package.json - Dependências
+```

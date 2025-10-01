@@ -19,6 +19,15 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         if (response.ok) {
             messageDiv.className = 'message success';
             messageDiv.textContent = data.message;
+            
+            // Salvar token e dados do usuário
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('usuario', JSON.stringify(data.usuario));
+            
+            // Redirecionar para dashboard após 1 segundo
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
         } else {
             messageDiv.className = 'message error';
             messageDiv.textContent = data.message;

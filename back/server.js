@@ -1,12 +1,32 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+const JWT_SECRET = 'sua-chave-secreta-super-segura-2024';
+
 // Armazenamento em memória (em produção, use um banco de dados)
 const usuarios = [];
+
+// Middleware de autenticação
+function autenticar(req, res, next) {
+    const token = req.headers['authorization']?.split(' ')[1];
+    
+    if (!token) {
+        return res.status(401).json({ message: 'Token não fornecido' });
+    }
+    
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.usuario = decoded;
+        next();
+    } catch (error) {
+        return res.status(401).json({ message: 'Token inválido' });
+    }
+}
 
 // Validação de email
 function validarEmail(email) {
@@ -239,8 +259,25 @@ app.post('/login', (req, res) => {
         });
     }
     
+    // Gerar token JWT
+    const token = jwt.sign(
+        { email: usuario.email, nome: usuario.nome },
+        JWT_SECRET,
+        { expiresIn: '1h' }
+    );
+    
     res.status(200).json({ 
-        message: `Bem-vindo, ${usuario.nome}!` 
+        message: `Bem-vindo, ${usuario.nome}!`,
+        token,
+        usuario: { nome: usuario.nome, email: usuario.email }
+    });
+});
+
+// Rota protegida - Dashboard
+app.get('/dashboard', autenticar, (req, res) => {
+    res.status(200).json({
+        message: 'Acesso autorizado',
+        usuario: req.usuario
     });
 });
 
