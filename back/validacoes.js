@@ -75,17 +75,21 @@ function validarSenha(senha, chromeVersion) {
         return { valido: false, mensagem: 'Senha deve conter pelo menos 1 letra maiúscula' };
     }
     
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(senha)) {
+        return { valido: false, mensagem: 'Senha deve conter pelo menos 1 caractere especial' };
+    }
+    
     // Validações de emojis
     if (!EMOJI_REGEX.test(senha)) {
         return { valido: false, mensagem: 'Senha deve conter pelo menos 1 emoji' };
     }
     
-    if (senha.includes('🖕')) {
-        return { valido: false, mensagem: 'Não pode ter o dedo do meio, seu sem educação' };
-    }
-    
     if (!EMOJIS_PARA_CIMA.some(emoji => senha.includes(emoji))) {
         return { valido: false, mensagem: 'Senha deve conter um emoji apontando para cima' };
+    }
+
+    if (senha.includes('🖕')) {
+        return { valido: false, mensagem: 'Não pode ter o dedo do meio, seu sem educação' };
     }
     
     // Validações de conteúdo específico
