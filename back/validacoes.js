@@ -1,7 +1,38 @@
+// Constantes globais
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const EMOJI_REGEX = /[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{24C2}\u{25AA}-\u{25AB}\u{25B6}\u{25C0}\u{25FB}-\u{25FE}\u{2600}-\u{2604}\u{260E}\u{2611}\u{2614}-\u{2615}\u{2618}\u{261D}\u{2620}\u{2622}-\u{2623}\u{2626}\u{262A}\u{262E}-\u{262F}\u{2638}-\u{263A}\u{2640}\u{2642}\u{2648}-\u{2653}\u{2660}\u{2663}\u{2665}-\u{2666}\u{2668}\u{267B}\u{267E}-\u{267F}\u{2692}-\u{2697}\u{2699}\u{269B}-\u{269C}\u{26A0}-\u{26A1}\u{26A7}\u{26AA}-\u{26AB}\u{26B0}-\u{26B1}\u{26BD}-\u{26BE}\u{26C4}-\u{26C5}\u{26C8}\u{26CE}-\u{26CF}\u{26D1}\u{26D3}-\u{26D4}\u{26E9}-\u{26EA}\u{26F0}-\u{26F5}\u{26F7}-\u{26FA}\u{26FD}\u{2702}\u{2705}\u{2708}-\u{270D}\u{270F}\u{2712}\u{2714}\u{2716}\u{271D}\u{2721}\u{2728}\u{2733}-\u{2734}\u{2744}\u{2747}\u{274C}\u{274E}\u{2753}-\u{2755}\u{2757}\u{2763}-\u{2764}\u{2795}-\u{2797}\u{27A1}\u{27B0}\u{27BF}\u{2934}-\u{2935}\u{2B05}-\u{2B07}\u{2B1B}-\u{2B1C}\u{2B50}\u{2B55}\u{3030}\u{303D}\u{3297}\u{3299}]/u;
+
+const EMOJIS_PARA_CIMA = ['☝', '👆', '⬆', '↑'];
+
+const VOGAIS_MAIUSCULAS = ['A', 'E', 'I', 'O', 'U'];
+
+const FEITICOS_HARRY_POTTER = [
+    'Expelliarmus', 'Expecto Patronum', 'Lumos', 'Alohomora', 'Avada Kedavra', 
+    'Wingardium Leviosa', 'Accio', 'Stupefy', 'Obliviate', 'Crucio', 'Imperio', 
+    'Protego', 'Riddikulus', 'Nox', 'Petrificus Totalus', 'Finite Incantatem', 
+    'Sectumsempra', 'Levicorpus', 'Aguamenti', 'Incendio', 'Episkey', 'Reparo', 
+    'Silencio', 'Confundo', 'Reducto', 'Diffindo', 'Bombarda', 'Confringo', 
+    'Geminio', 'Descendo', 'Ascendio', 'Aparecium', 'Colloportus', 'Expulso', 
+    'Impedimenta', 'Engorgio', 'Reducio', 'Mobilicorpus', 'Piertotum Locomotor', 
+    'Homenum Revelio', 'Salvio Hexia', 'Cave Inimicum', 'Muffliato', 'Langlock', 
+    'Liberacorpus', 'Tergeo', 'Defodio', 'Deprimo', 'Carpe Retractum', 'Relashio', 
+    'Obscuro', 'Anapneo', 'Rennervate', 'Vulnera Sanentur'
+];
+
+const VALORES_ROMANOS = [
+    { valor: 30, romano: 'XXX' },
+    { valor: 20, romano: 'XX' },
+    { valor: 10, romano: 'X' },
+    { valor: 9, romano: 'IX' },
+    { valor: 5, romano: 'V' },
+    { valor: 4, romano: 'IV' },
+    { valor: 1, romano: 'I' }
+];
+
 // Validação de email
 function validarEmail(email) {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
+    return EMAIL_REGEX.test(email);
 }
 
 // Validação de nome
@@ -11,21 +42,11 @@ function validarNome(nome) {
 
 // Converter número para romano (suporta 1-31 para dias do mês)
 function converterParaRomano(num) {
-    const valores = [
-        { valor: 30, romano: 'XXX' },
-        { valor: 20, romano: 'XX' },
-        { valor: 10, romano: 'X' },
-        { valor: 9, romano: 'IX' },
-        { valor: 5, romano: 'V' },
-        { valor: 4, romano: 'IV' },
-        { valor: 1, romano: 'I' }
-    ];
-    
     let resultado = '';
-    for (let i = 0; i < valores.length; i++) {
-        while (num >= valores[i].valor) {
-            resultado += valores[i].romano;
-            num -= valores[i].valor;
+    for (let i = 0; i < VALORES_ROMANOS.length; i++) {
+        while (num >= VALORES_ROMANOS[i].valor) {
+            resultado += VALORES_ROMANOS[i].romano;
+            num -= VALORES_ROMANOS[i].valor;
         }
     }
     return resultado;
@@ -33,112 +54,92 @@ function converterParaRomano(num) {
 
 // Validação de senha
 function validarSenha(senha, chromeVersion) {
+    // Validações básicas
     if (!senha) {
         return { valido: false, mensagem: 'Senha é obrigatória' };
     }
     
     if (senha.length < 5) {
-        return { valido: false, mensagem: `Senha deve ter pelo menos 5 caracteres`};
+        return { valido: false, mensagem: 'Senha deve ter pelo menos 5 caracteres' };
     }
     
     if (!/\d/.test(senha)) {
         return { valido: false, mensagem: 'Senha deve conter pelo menos 1 número' };
     }
     
-    // Validar se tem letra
     if (!/[a-z]/.test(senha)) {
         return { valido: false, mensagem: 'Senha deve conter pelo menos 1 letra' };
     }
     
-    // Validar se tem letra maiúscula
     if (!/[A-Z]/.test(senha)) {
         return { valido: false, mensagem: 'Senha deve conter pelo menos 1 letra maiúscula' };
     }
     
-    // Regex para detectar emojis
-    const emojiRegex = /[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F000}-\u{1F02F}\u{1F0A0}-\u{1F0FF}\u{1F100}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2328}\u{23CF}\u{23E9}-\u{23F3}\u{23F8}-\u{23FA}\u{24C2}\u{25AA}-\u{25AB}\u{25B6}\u{25C0}\u{25FB}-\u{25FE}\u{2600}-\u{2604}\u{260E}\u{2611}\u{2614}-\u{2615}\u{2618}\u{261D}\u{2620}\u{2622}-\u{2623}\u{2626}\u{262A}\u{262E}-\u{262F}\u{2638}-\u{263A}\u{2640}\u{2642}\u{2648}-\u{2653}\u{2660}\u{2663}\u{2665}-\u{2666}\u{2668}\u{267B}\u{267E}-\u{267F}\u{2692}-\u{2697}\u{2699}\u{269B}-\u{269C}\u{26A0}-\u{26A1}\u{26A7}\u{26AA}-\u{26AB}\u{26B0}-\u{26B1}\u{26BD}-\u{26BE}\u{26C4}-\u{26C5}\u{26C8}\u{26CE}-\u{26CF}\u{26D1}\u{26D3}-\u{26D4}\u{26E9}-\u{26EA}\u{26F0}-\u{26F5}\u{26F7}-\u{26FA}\u{26FD}\u{2702}\u{2705}\u{2708}-\u{270D}\u{270F}\u{2712}\u{2714}\u{2716}\u{271D}\u{2721}\u{2728}\u{2733}-\u{2734}\u{2744}\u{2747}\u{274C}\u{274E}\u{2753}-\u{2755}\u{2757}\u{2763}-\u{2764}\u{2795}-\u{2797}\u{27A1}\u{27B0}\u{27BF}\u{2934}-\u{2935}\u{2B05}-\u{2B07}\u{2B1B}-\u{2B1C}\u{2B50}\u{2B55}\u{3030}\u{303D}\u{3297}\u{3299}]/u;
-    
-    if (!emojiRegex.test(senha)) {
+    // Validações de emojis
+    if (!EMOJI_REGEX.test(senha)) {
         return { valido: false, mensagem: 'Senha deve conter pelo menos 1 emoji' };
     }
     
-    // Validar dia em romano
-    const hoje = new Date();
-    const dia = hoje.getDate();
-    const diaRomano = converterParaRomano(dia);
-    
-    if (!senha.includes(diaRomano)) {
-        return { valido: false, mensagem: `Senha deve conter o dia de hoje em romano: ${diaRomano}` };
-    }
-    
-    // Validar primeiros números do PI
-    if (!senha.includes('314')) {
-        return { valido: false, mensagem: 'Senha deve conter os primeiros números do PI' };
-    }
-    
-    // Validar se não tem dedo do meio
     if (senha.includes('🖕')) {
         return { valido: false, mensagem: 'Não pode ter o dedo do meio, seu sem educação' };
     }
     
-    // Validar emoji apontando para cima
-    const emojisParaCima = ['☝', '👆', '⬆', '↑'];
-    const temEmojiParaCima = emojisParaCima.some(emoji => senha.includes(emoji));
-    
-    if (!temEmojiParaCima) {
+    if (!EMOJIS_PARA_CIMA.some(emoji => senha.includes(emoji))) {
         return { valido: false, mensagem: 'Senha deve conter um emoji apontando para cima' };
     }
     
-    // Validar ano do hexa (Brasil ainda não ganhou, então aceita 2002 - penta)
+    // Validações de conteúdo específico
+    const diaRomano = converterParaRomano(new Date().getDate());
+    if (!senha.includes(diaRomano)) {
+        return { valido: false, mensagem: `Senha deve conter o dia de hoje em romano: ${diaRomano}` };
+    }
+    
+    if (!senha.includes('314')) {
+        return { valido: false, mensagem: 'Senha deve conter os primeiros números do PI' };
+    }
+    
     if (!senha.includes('2006')) {
         return { valido: false, mensagem: 'Senha deve conter o ano que o Brasil ganhou o penta' };
     }
     
-    // Validar bandeira dos Países Baixos
     if (!senha.includes('🇳🇱')) {
         return { valido: false, mensagem: 'Senha deve conter a bandeira dos Países Baixos' };
     }
     
-    // Validar todas as vogais maiúsculas
-    const vogaisMaiusculas = ['A', 'E', 'I', 'O', 'U'];
-    const vogaisFaltando = vogaisMaiusculas.filter(vogal => !senha.includes(vogal));
-    
-    if (vogaisFaltando.length > 0) {
-        return { valido: false, mensagem: `Senha deve conter todas as vogais maiúsculas (A, E, I, O, U)` };
-    }
-    
-    // Validar código do telefone do Brasil
     if (!senha.includes('+55')) {
         return { valido: false, mensagem: 'Senha deve conter o código de telefone do Brasil' };
     }
     
-    // Validar bandeira dos Países Baixos na quinta posição (índice 4)
+    // Validações de vogais
+    const vogaisFaltando = VOGAIS_MAIUSCULAS.filter(vogal => !senha.includes(vogal));
+    if (vogaisFaltando.length > 0) {
+        return { valido: false, mensagem: 'Senha deve conter todas as vogais maiúsculas (A, E, I, O, U)' };
+    }
+    
+    // Validação de posição da bandeira
     const senhaArray = [...senha];
     if (senhaArray[4] !== '🇳' || senhaArray[5] !== '🇱') {
         return { valido: false, mensagem: 'A bandeira dos Países Baixos deve estar na quinta posição' };
     }
     
-    // Validar feitiço do Harry Potter
-    const feiticos = ['Expelliarmus', 'Expecto Patronum', 'Lumos', 'Alohomora', 'Avada Kedavra', 'Wingardium Leviosa', 'Accio', 'Stupefy', 'Obliviate', 'Crucio', 'Imperio', 'Protego', 'Riddikulus', 'Nox', 'Petrificus Totalus', 'Finite Incantatem', 'Sectumsempra', 'Levicorpus', 'Aguamenti', 'Incendio', 'Episkey', 'Reparo', 'Silencio', 'Confundo', 'Reducto', 'Diffindo', 'Bombarda', 'Confringo', 'Geminio', 'Descendo', 'Ascendio', 'Aparecium', 'Colloportus', 'Expulso', 'Impedimenta', 'Engorgio', 'Reducio', 'Mobilicorpus', 'Piertotum Locomotor', 'Homenum Revelio', 'Salvio Hexia', 'Cave Inimicum', 'Muffliato', 'Langlock', 'Liberacorpus', 'Tergeo', 'Defodio', 'Deprimo', 'Carpe Retractum', 'Relashio', 'Obscuro', 'Anapneo', 'Rennervate', 'Vulnera Sanentur'];
-    const temFeitico = feiticos.some(feitico => senha.includes(feitico));
-    
-    if (!temFeitico) {
+    // Validação de feitiço
+    if (!FEITICOS_HARRY_POTTER.some(feitico => senha.includes(feitico))) {
         return { valido: false, mensagem: 'Senha deve conter um feitiço do Harry Potter' };
     }
     
-    // Validar número de caracteres (contando emojis compostos como 1)
+    // Validação de tamanho
     const segmenter = new Intl.Segmenter('pt-BR', { granularity: 'grapheme' });
     const tamanhoSenha = [...segmenter.segment(senha)].length.toString();
     if (!senha.includes(tamanhoSenha)) {
         return { valido: false, mensagem: `Senha deve conter o número atual de caracteres: ${tamanhoSenha}` };
     }
     
-    // Validar versão do Chrome
+    // Validação de Chrome
     if (chromeVersion && !senha.includes(chromeVersion)) {
-        return { valido: false, mensagem: `Senha deve conter a versão do Chrome` };
+        return { valido: false, mensagem: 'Senha deve conter a versão do Chrome' };
     }
     
-    // Validar nome do criador
+    // Validações extras
     if (senha.includes('karan')) {
         return { valido: false, mensagem: 'Nome próprio é com letra maiúscula' };
     }
@@ -168,4 +169,5 @@ module.exports = {
     converterParaRomano,
     validarSenha
 };
+
 
