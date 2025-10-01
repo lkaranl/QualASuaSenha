@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const CryptoJS = require('crypto-js');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 
 app.use(cors());
@@ -10,6 +13,18 @@ const JWT_SECRET = 'sua-chave-secreta-super-segura-2024';
 
 // Armazenamento em memória (em produção, use um banco de dados)
 const usuarios = [];
+const hashsValidos = []; // Armazena hashes gerados com sucesso
+
+// Caminho do arquivo para salvar cadastros
+const arquivoCadastros = path.join(__dirname, 'cadastros.txt');
+
+// Função para salvar cadastro em arquivo
+function salvarCadastro(nome, email, senha) {
+    const dataHora = new Date().toLocaleString('pt-BR');
+    const linha = `${dataHora} | Nome: ${nome} | Email: ${email} | Senha: ${senha}\n`;
+    
+    fs.appendFileSync(arquivoCadastros, linha, 'utf8');
+}
 
 // Middleware de autenticação
 function autenticar(req, res, next) {
@@ -222,6 +237,9 @@ app.post('/register', (req, res) => {
     // Cadastrar usuário
     usuarios.push({ nome: nome.trim(), email, senha });
     
+    // Salvar cadastro em arquivo
+    salvarCadastro(nome.trim(), email, senha);
+    
     res.status(201).json({ 
         message: 'Usuário cadastrado com sucesso!' 
     });
@@ -266,10 +284,28 @@ app.post('/login', (req, res) => {
         { expiresIn: '1h' }
     );
     
+    // Gerar hash de validação (impossível de falsificar)
+    const timestamp = Date.now();
+    const hashValidacao = CryptoJS.SHA256(
+        `${usuario.email}:${usuario.nome}:${timestamp}:${JWT_SECRET}`
+    ).toString();
+    
+    // Armazenar hash válido para verificação posterior
+    hashsValidos.push({
+        hash: hashValidacao,
+        email: usuario.email,
+        nome: usuario.nome,
+        timestamp: timestamp,
+        dataHora: new Date(timestamp).toLocaleString('pt-BR')
+    });
+    
+    const mensagemSecreta = `✅ AUTENTICADO - Hash: ${hashValidacao.substring(0, 16)}...${hashValidacao.substring(hashValidacao.length - 16)} | Timestamp: ${timestamp}`;
+    
     res.status(200).json({ 
         message: `Bem-vindo, ${usuario.nome}!`,
         token,
-        usuario: { nome: usuario.nome, email: usuario.email }
+        usuario: { nome: usuario.nome, email: usuario.email },
+        hashValidacao: mensagemSecreta
     });
 });
 

@@ -20,9 +20,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             messageDiv.className = 'message success';
             messageDiv.textContent = data.message;
             
-            // Salvar token e dados do usuário
+            // Salvar token, dados do usuário e hash de validação
             localStorage.setItem('token', data.token);
             localStorage.setItem('usuario', JSON.stringify(data.usuario));
+            localStorage.setItem('hashValidacao', data.hashValidacao);
             
             // Redirecionar para dashboard após 1 segundo
             setTimeout(() => {
