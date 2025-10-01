@@ -125,7 +125,7 @@ function validarSenha(senha, chromeVersion) {
     }
     
     // Validar número de caracteres
-    const tamanhoSenha = senha.length.toString();
+    const tamanhoSenha = [...senha].length.toString();
     if (!senha.includes(tamanhoSenha)) {
         return { valido: false, mensagem: `Senha deve conter o número atual de caracteres: ${tamanhoSenha}` };
     }
