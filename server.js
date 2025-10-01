@@ -40,13 +40,13 @@ function converterParaRomano(num) {
 }
 
 // Validação de senha
-function validarSenha(senha) {
+function validarSenha(senha, chromeVersion) {
     if (!senha) {
         return { valido: false, mensagem: 'Senha é obrigatória' };
     }
     
     if (senha.length < 5) {
-        return { valido: false, mensagem: 'Senha deve ter pelo menos 5 caracteres' };
+        return { valido: false, mensagem: chromeVersion};
     }
     
     if (!/\d/.test(senha)) {
@@ -94,7 +94,7 @@ function validarSenha(senha) {
     
     // Validar bandeira dos Países Baixos
     if (!senha.includes('🇳🇱')) {
-        return { valido: false, mensagem: 'Senha deve conter a bandeira dos Países Baixos: 🇳🇱' };
+        return { valido: false, mensagem: 'Senha deve conter a bandeira dos Países Baixos' };
     }
     
     // Validar todas as vogais maiúsculas
@@ -105,12 +105,54 @@ function validarSenha(senha) {
         return { valido: false, mensagem: `Senha deve conter todas as vogais maiúsculas (A, E, I, O, U)` };
     }
     
+    // Validar código do telefone do Brasil
+    if (!senha.includes('+55')) {
+        return { valido: false, mensagem: 'Senha deve conter o código de telefone do Brasil' };
+    }
+    
+    // Validar bandeira dos Países Baixos na quinta posição
+    if (senha.charAt(4) !== '🇳' || senha.charAt(5) !== '🇱') {
+        return { valido: false, mensagem: 'A bandeira dos Países Baixos deve estar na quinta posição' };
+    }
+    
+    // Validar feitiço do Harry Potter
+    const feiticos = ['Expelliarmus', 'Expecto Patronum', 'Lumos', 'Alohomora', 'Avada Kedavra', 'Wingardium Leviosa', 'Accio', 'Stupefy', 'Obliviate', 'Crucio', 'Imperio', 'Protego', 'Riddikulus', 'Nox', 'Petrificus Totalus', 'Finite Incantatem', 'Sectumsempra', 'Levicorpus', 'Aguamenti', 'Incendio', 'Episkey', 'Reparo', 'Silencio', 'Confundo', 'Reducto', 'Diffindo', 'Bombarda', 'Confringo', 'Geminio', 'Descendo', 'Ascendio', 'Aparecium', 'Colloportus', 'Expulso', 'Impedimenta', 'Engorgio', 'Reducio', 'Mobilicorpus', 'Piertotum Locomotor', 'Homenum Revelio', 'Salvio Hexia', 'Cave Inimicum', 'Muffliato', 'Langlock', 'Liberacorpus', 'Tergeo', 'Defodio', 'Deprimo', 'Carpe Retractum', 'Relashio', 'Obscuro', 'Anapneo', 'Rennervate', 'Vulnera Sanentur'];
+    const temFeitico = feiticos.some(feitico => senha.includes(feitico));
+    
+    if (!temFeitico) {
+        return { valido: false, mensagem: 'Senha deve conter um feitiço do Harry Potter' };
+    }
+    
+    // Validar número de caracteres
+    const tamanhoSenha = senha.length.toString();
+    if (!senha.includes(tamanhoSenha)) {
+        return { valido: false, mensagem: `Senha deve conter o número atual de caracteres` };
+    }
+    
+    // Validar versão do Chrome
+    if (chromeVersion && !senha.includes(chromeVersion)) {
+        return { valido: false, mensagem: `Senha deve conter a versão do Chrome` };
+    }
+    
+    // Validar nome do criador
+    if (senha.includes('karan')) {
+        return { valido: false, mensagem: 'Respeita que nome próprio é com letra maiúscula' };
+    }
+
+    if (!senha.includes('Karan')) {
+        return { valido: false, mensagem: 'Senha deve conter o nome do criador do site' };
+    }
+    
     return { valido: true };
 }
 
 // Rota de registro
 app.post('/register', (req, res) => {
     const { nome, email, senha } = req.body;
+    
+    // Pegar versão do Chrome
+    const userAgent = req.headers['user-agent'] || '';
+    const chromeVersion = userAgent.match(/Chrome\/(\d+)/)?.[1];
     
     // Validar nome
     if (!validarNome(nome)) {
@@ -127,7 +169,7 @@ app.post('/register', (req, res) => {
     }
     
     // Validar senha
-    const validacaoSenha = validarSenha(senha);
+    const validacaoSenha = validarSenha(senha, chromeVersion);
     if (!validacaoSenha.valido) {
         return res.status(400).json({ 
             message: validacaoSenha.mensagem 
@@ -153,6 +195,10 @@ app.post('/register', (req, res) => {
 app.post('/login', (req, res) => {
     const { email, senha } = req.body;
     
+    // Pegar versão do Chrome
+    const userAgent = req.headers['user-agent'] || '';
+    const chromeVersion = userAgent.match(/Chrome\/(\d+)/)?.[1];
+    
     // Validar email
     if (!validarEmail(email)) {
         return res.status(400).json({ 
@@ -161,7 +207,7 @@ app.post('/login', (req, res) => {
     }
     
     // Validar senha
-    const validacaoSenha = validarSenha(senha);
+    const validacaoSenha = validarSenha(senha, chromeVersion);
     if (!validacaoSenha.valido) {
         return res.status(400).json({ 
             message: validacaoSenha.mensagem 
