@@ -56,6 +56,7 @@ Os cadastros são salvos automaticamente em `back/cadastros.txt` com:
 
 /back
   - server.js - Servidor Node.js com JWT
+  - validacoes.js - Funções de validação de senha
   - package.json - Dependências
   - cadastros.txt - Arquivo com todos os cadastros (gerado automaticamente)
 ```
