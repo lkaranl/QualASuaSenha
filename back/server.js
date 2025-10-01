@@ -54,9 +54,11 @@ function validarNome(nome) {
     return nome && nome.trim().length >= 3;
 }
 
-// Converter número para romano
+// Converter número para romano (suporta 1-31 para dias do mês)
 function converterParaRomano(num) {
     const valores = [
+        { valor: 30, romano: 'XXX' },
+        { valor: 20, romano: 'XX' },
         { valor: 10, romano: 'X' },
         { valor: 9, romano: 'IX' },
         { valor: 5, romano: 'V' },
@@ -86,6 +88,16 @@ function validarSenha(senha, chromeVersion) {
     
     if (!/\d/.test(senha)) {
         return { valido: false, mensagem: 'Senha deve conter pelo menos 1 número' };
+    }
+    
+    // Validar se tem letra
+    if (!/[a-z]/.test(senha)) {
+        return { valido: false, mensagem: 'Senha deve conter pelo menos 1 letra' };
+    }
+
+    // Validar se tem letra maiúscula
+    if (!/[A-Z]/.test(senha)) {
+        return { valido: false, mensagem: 'Senha deve conter pelo menos 1 letra maiúscula' };
     }
     
     // Regex para detectar emojis
@@ -249,10 +261,6 @@ app.post('/register', (req, res) => {
 app.post('/login', (req, res) => {
     const { email, senha } = req.body;
     
-    // Pegar versão do Chrome
-    const userAgent = req.headers['user-agent'] || '';
-    const chromeVersion = userAgent.match(/Chrome\/(\d+)/)?.[1];
-    
     // Validar email
     if (!validarEmail(email)) {
         return res.status(400).json({ 
@@ -260,11 +268,10 @@ app.post('/login', (req, res) => {
         });
     }
     
-    // Validar senha
-    const validacaoSenha = validarSenha(senha, chromeVersion);
-    if (!validacaoSenha.valido) {
+    // Validar se senha foi preenchida
+    if (!senha) {
         return res.status(400).json({ 
-            message: validacaoSenha.mensagem 
+            message: 'Senha é obrigatória' 
         });
     }
     
