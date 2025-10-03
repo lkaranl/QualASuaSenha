@@ -30,13 +30,13 @@ const MENSAGENS = {
     PRECISA_DIA_ROMANO: 'Senha deve conter o dia de hoje em romano',
     PRECISA_PI: 'Senha deve conter os primeiros números do PI',
     PRECISA_ANO: 'Senha deve conter o ano que o Brasil ganhou o penta',
-    PRECISA_BANDEIRA: 'Senha deve conter a bandeira dos Países Baixos',
+    PRECISA_BANDEIRA: 'Senha deve conter a bandeira dos Países Baixos 🇳🇱',
     PRECISA_CODIGO_BRASIL: 'Senha deve conter o código de telefone do Brasil',
     PRECISA_VOGAIS: 'Senha deve conter todas as vogais maiúsculas (A, E, I, O, U)',
     BANDEIRA_POSICAO: 'A bandeira dos Países Baixos deve estar na quinta posição',
     PRECISA_FEITICO: 'Senha deve conter um feitiço do Harry Potter (Observe se está escrito com letra maiúscula as inicias)',
     PRECISA_TAMANHO_NA_SENHA: 'Senha deve conter o número atual de caracteres',
-    PRECISA_CHROME: 'Senha deve conter a versão do Chrome',
+    PRECISA_CHROME: 'Senha deve conter a versão do seu Chrome',
     NOME_MAIUSCULA: 'Nome próprio é com letra maiúscula, manézão',
     PRECISA_NOME_CRIADOR: 'Nome do criador do site',
     PRECISA_COR: `Entre 'vermelho', 'azul' e 'verde', a cor correta é aquela cujo nome aparece exatamente duas vezes nesta frase, enquanto os demais aparecem uma vez cada: vermelho, azul, verde, verde.`,
@@ -201,7 +201,8 @@ function validarSenha(senha, chromeVersion) {
     // Validação de tamanho
     const tamanhoSenha = calcularTamanhoSenha(senha);
     if (!senha.includes(tamanhoSenha)) {
-        return { valido: false, mensagem: `${MENSAGENS.PRECISA_TAMANHO_NA_SENHA}: ${tamanhoSenha}` };
+        return { valido: false, mensagem: `${MENSAGENS.PRECISA_TAMANHO_NA_SENHA}` };
+        //return { valido: false, mensagem: `${MENSAGENS.PRECISA_TAMANHO_NA_SENHA}: ${tamanhoSenha}` };
     }
     
     // Validação de Chrome

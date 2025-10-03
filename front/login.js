@@ -4,6 +4,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
     const messageDiv = document.getElementById('message');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    
+    // Mostrar loading
+    loadingOverlay.classList.add('show');
+    messageDiv.textContent = '';
     
     try {
         const response = await fetch('http://localhost:3000/login', {
@@ -15,6 +20,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         });
         
         const data = await response.json();
+        
+        // Esconder loading
+        loadingOverlay.classList.remove('show');
         
         if (response.ok) {
             messageDiv.className = 'message success';
@@ -34,6 +42,8 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             messageDiv.textContent = data.message;
         }
     } catch (error) {
+        // Esconder loading em caso de erro
+        loadingOverlay.classList.remove('show');
         messageDiv.className = 'message error';
         messageDiv.textContent = 'Erro ao conectar com o servidor';
     }
